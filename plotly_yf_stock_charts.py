@@ -21,7 +21,7 @@ KEY_DATES = {
 COMPLETION_YYYY, COMPLETION_MM, COMPLETION_DD = KEY_DATES[COMPLETION_DATE_LABEL]
 COMPLETION_DATE_STR = f"{COMPLETION_YYYY:04}-{COMPLETION_MM:02}-{COMPLETION_DD:02}"
 COMPLETION_DATETIME = datetime.datetime(COMPLETION_YYYY, COMPLETION_MM, COMPLETION_DD).timestamp() * 1000
-print(COMPLETION_DATE_STR)
+print(f'COMPLETION_DATE_STR: {COMPLETION_DATE_STR}')
 
 DEFAULT_START = '2021-01-01'
 
@@ -228,15 +228,19 @@ def px_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False):
     fig.show()
 
 
-def go_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False):
+def go_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False, to_html=False):
     """Using plotly graph_objects (go) attempt to combine:
      - bank value (in $) assuming starting with `start_shares` of SLAB
      - SLAB stock price
      - SWKS stock price
 
+    todo:
+     - Add SMH/SOX or similar semiconductor ETF for reference (reflect bad years for market)
+
     Args:
         start_shares (int): number of shares of SLAB to own to start bank value
         to_csv (bool): if True, output df to csv for debugging
+        to_html (bool): if True, output plot to html file
 
     Returns:
 
@@ -317,13 +321,17 @@ def go_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False):
         label=dict(text="<b>100% value at transition</b>", font=dict(color=DOLLAR_BILL_COLOR))
     )
 
-    # fig = add_events_to_fig(fig=fig)
+    # output to file or show locally in browser
+    if to_html:
+        fig.write_html('./plots/swks_slab_share_transfer.html')
+    else:
+        fig.show()
 
-    fig.show()
+    return fig
 
 
 if __name__ == '__main__':
     # plot_swks_slab_acquisition()
     # plot_color_months(ticker='SWKS', start='2021-01-01')
     # px_plot_swks_slab_share_transfer(to_csv=True)
-    go_plot_swks_slab_share_transfer()
+    go_plot_swks_slab_share_transfer(to_html=True)

@@ -228,7 +228,7 @@ def px_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False):
     fig.show()
 
 
-def go_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False, to_html=False):
+def go_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False, to_html=False, to_png=False):
     """Using plotly graph_objects (go) attempt to combine:
      - bank value (in $) assuming starting with `start_shares` of SLAB
      - SLAB stock price
@@ -322,10 +322,15 @@ def go_plot_swks_slab_share_transfer(start_shares=1000, to_csv=False, to_html=Fa
     )
 
     # output to file or show locally in browser
+    today = datetime.datetime.now().strftime("%Y%m%d")
+    path_no_ext = f'./plots/swks_slab_share_transfer_{today}'
     if to_html:
-        fig.write_html('./plots/swks_slab_share_transfer.html')
+        fig.write_html(f'{path_no_ext}.html')
     else:
         fig.show()
+
+    if to_png:
+        fig.write_image(f'{path_no_ext}.png', width=1600, height=700)
 
     return fig
 
@@ -334,4 +339,4 @@ if __name__ == '__main__':
     # plot_swks_slab_acquisition()
     # plot_color_months(ticker='SWKS', start='2021-01-01')
     # px_plot_swks_slab_share_transfer(to_csv=True)
-    go_plot_swks_slab_share_transfer(to_html=True)
+    go_plot_swks_slab_share_transfer(to_html=True, to_png=True)
